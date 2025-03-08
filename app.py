@@ -17,7 +17,7 @@ def login():
     data = request.get_json(silent=True)  # Prevent crash if JSON is invalid
 
     # Intentional bug: Allows login if "username" is "admin" without checking "password" existence
-    if data and data.get("username") == "admin":
+    if data and data.get("username") == "SilverAdmin":
         password = data.get("password")  # Bug: This can be missing and will not cause failure
         if password is None or password == "HASGV56#@JH89":  # Bypass if password is missing
             session["user"] = "admin"
