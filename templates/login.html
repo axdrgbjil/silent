@@ -48,13 +48,13 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
 
     const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value; 
+    const password = document.getElementById("password").value;
 
     try {
         const response = await fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password })  // Bug: Password is enforced in frontend
         });
 
         if (response.ok) {
