@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h1 class="login-title">Welcome !!</h1>
+    <form id="loginForm" class="login-form">
+        <div class="input-group">
+            <label for="username" class="input-label">Username</label>
+            <div class="input-wrapper">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" 
+                       id="username" 
+                       class="form-input" 
+                       placeholder="Enter your username"
+                       autocomplete="username" 
+                       required>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="password" class="input-label">Password</label>
+            <div class="input-wrapper">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" 
+                       id="password" 
+                       class="form-input" 
+                       placeholder="Enter your password"
+                       autocomplete="current-password" 
+                       required>
+                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+        <button type="submit" class="submit-btn">
+            <span>Sign In</span>
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <p id="errorMessage" class="error-message"></p>
+    </form>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const submitBtn = this.querySelector('.submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value; 
+
+    try {
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+            window.location.href = "/dashboard";
+        } else {
+            document.getElementById("errorMessage").innerText = "Invalid credentials.";
+        }
+    } catch (error) {
+        document.getElementById("errorMessage").innerText = "An error occurred. Please try again.";
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+    }
+});
+
+document.querySelector('.password-toggle').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const icon = this.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+});
+</script>
+{% endblock %}
